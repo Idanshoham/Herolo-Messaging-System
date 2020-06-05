@@ -1,4 +1,5 @@
 const Authentication = require('./controllers/authentication');
+const UserController = require('./controllers/userController');
 const MessageController = require('./controllers/messageController');
 const passportService = require('./services/passport');
 const passport = require('passport');
@@ -13,5 +14,10 @@ module.exports = function(app) {
     app.post('/signin', requireSignin ,Authentication.signin);
     app.post('/signup', Authentication.signup);
 
-    //TODO: add message functions here.
+    app.post('/getUserDetails', UserController.getUserDetails);
+    app.post('/editUserDetails', UserController.editUserDetails);
+
+    app.post('/writeMessage', MessageController.writeMessage);
+    app.post('/deleteMessage', MessageController.deleteMessage);
+    app.post('/getAllMessages', MessageController.getAllMessages);
 };
