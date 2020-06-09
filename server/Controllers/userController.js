@@ -1,5 +1,8 @@
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jwt-simple');
+const ObjectID = require('mongodb').ObjectID;
 const User = require('../models/user');
+const config = require('../config');
 
 findAndGetUserByUsername = (username, res, next) => {
     User.findOne({ username }, function(err, existingUser) {
@@ -14,6 +17,27 @@ findAndGetUserByUsername = (username, res, next) => {
         res.json({ user: existingUser });
     });
 };
+
+exports.getUserDetailsById = function(req, res, next) {
+    const userToken = req.body.userToken;
+    const userId = ObjectID(jwt.decode(userToken, config.secret).sub);
+
+    if (!userId) {
+        return res.status(422).send({ error: 'You must provide userId'});
+    }
+
+    User.findById(userId , function(err, existingUser) {
+        if (err) {
+            return next(err);
+        }
+
+        if (!existingUser) {
+            return res.status(422).send({ error: 'user does not exists' });
+        }
+
+        res.json({ user: existingUser });
+    });
+}
 
 exports.getUserDetails = function(req, res, next) {
     const username = req.body.username;

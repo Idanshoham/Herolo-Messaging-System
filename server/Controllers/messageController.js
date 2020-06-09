@@ -13,49 +13,107 @@ exports.writeMessage = function(req, res, next) {
         receiver,
         subject,
         message,
-        creationDate: Date.now()
+        creationDate: Date.now(),
+        isDeletedBySender: false,
+        isDeletedByReceiver: false
     }
 
     Message.insertMany(newMessage, function (err) {
         if (err) {
             return next(err);
         };
+
         res.send('message sent');
     });
 }
 
 exports.deleteMessage = function(req, res, next) {
-    const { messageId } = req.body;
+    const { messageId, isDeleterSender } = req.body;
 
-    Message.deleteOne({ _id: ObjectID(messageId) }, function(err, result) {
-        if (err) {
-            return next(err);
-        } 
-        if (!result.deletedCount) {
-            return res.status(422).send({ error: 'message was not deleted' });
-        }
-        res.send('message deleted');
-    });
+    if (isDeleterSender) {
+        Message.findOneAndUpdate({ _id: ObjectID(messageId) }, { isDeletedBySender: true }, function(err, message) {
+            if (err) {
+                return next(err);
+            } 
+
+            if (!message) {
+                return res.status(422).send({ error: 'message was not found' });
+            }
+
+            if (message.isDeletedByReceiver) {
+                Message.deleteOne({ _id: ObjectID(messageId) }, function(err, result) {
+                    if (err) {
+                        return next(err);
+                    } 
+
+                    if (!result.deletedCount) {
+                        return res.status(422).send({ error: 'message was not deleted' });
+                    }
+
+                    res.send('message deleted completly');
+                });
+            }
+            else
+                res.send('message deleted');
+        });
+    }
+    else {
+        Message.findOneAndUpdate({ _id: ObjectID(messageId) }, { isDeletedByReceiver: true }, function(err, message) {
+            if (err) {
+                return next(err);
+            } 
+
+            if (!message) {
+                return res.status(422).send({ error: 'message was not found' });
+            }
+
+            if (message.isDeletedBySender) {
+                Message.deleteOne({ _id: ObjectID(messageId) }, function(err, result) {
+                    if (err) {
+                        return next(err);
+                    } 
+
+                    if (!result.deletedCount) {
+                        return res.status(422).send({ error: 'message was not deleted' });
+                    }
+
+                    res.send('message deleted completly');
+                });
+            }
+            else
+                res.send('message deleted');
+        });
+    }
 }
 
-exports.getAllMessages = function(req, res, next) {
+exports.getAllReceivedMessages = function(req, res, next) {
     const { username } = req.body;
 
     if (!username) {
         return res.status(422).send({ error: 'You must provide username'});
     }
 
-    Message.find({ sender: username }, function(err, allSendedMessages) {
+    Message.find({ receiver: username, isDeletedByReceiver: false }, function(err, allReceivedMessages) {
         if (err) {
             return next(err);
+        } else {
+            res.send({ messages: allReceivedMessages.length !== 0 ? allReceivedMessages : undefined });
         }
+    });
+}
 
-        Message.find({ receiver: username }, function(err, allReceivedMessages) {
-            if (err) {
-                return next(err);
-            } else {
-                res.send(allSendedMessages.concat(allReceivedMessages));
-            }
-        });
+exports.getAllSentMessages = function(req, res, next) {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(422).send({ error: 'You must provide username'});
+    }
+
+    Message.find({ sender: username, isDeletedBySender: false }, function(err, allSentMessages) {
+        if (err) {
+            return next(err);
+        } else {
+            res.send({ messages: allSentMessages.length !== 0 ? allSentMessages : undefined });
+        }
     });
 }

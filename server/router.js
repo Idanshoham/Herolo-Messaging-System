@@ -14,10 +14,12 @@ module.exports = function(app) {
     app.post('/signin', requireSignin ,AuthenticationController.signin);
     app.post('/signup', AuthenticationController.signup);
 
+    app.post('/getUserDetailsById', UserController.getUserDetailsById);
     app.post('/getUserDetails', UserController.getUserDetails);
     app.post('/editUserDetails', UserController.editUserDetails);
 
     app.post('/writeMessage', MessageController.writeMessage);
     app.post('/deleteMessage', MessageController.deleteMessage);
-    app.post('/getAllMessages', MessageController.getAllMessages);
+    app.post('/getAllReceivedMessages', MessageController.getAllReceivedMessages);
+    app.post('/getAllSentMessages', MessageController.getAllSentMessages);
 };
