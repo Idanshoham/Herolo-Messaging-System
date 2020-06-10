@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default () => {
+export default ({ children }) => {
     return (
         <div>
-            hello React!
+            {children}
         </div>
     );
 };
