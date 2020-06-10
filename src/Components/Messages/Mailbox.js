@@ -193,14 +193,14 @@ const Mailbox = props => {
     }
 
     const handleDelete = (messageId, messages) => {
-      const newMessages = messages.map(message => {
-        if (messages._id !== messageId)
-          return message;
+      const newMessages = messages.filter(message => {
+        return message._id !== messageId;
       });
+
       deleteMessage(messageId, !inbox).then(() => {
         if (inbox) {
           if (newMessages.length < messagesReceived.length) {
-            handleGetAllReceviedMessages(user.sername);
+            handleGetAllReceviedMessages(user.username);
           } 
         } else {
           if (newMessages.length < messagesSent.length) {

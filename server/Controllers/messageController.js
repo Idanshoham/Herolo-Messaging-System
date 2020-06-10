@@ -88,7 +88,7 @@ exports.deleteMessage = function(req, res, next) {
 
 exports.getAllReceivedMessages = function(req, res, next) {
     const { username } = req.body;
-
+    console.log(username);
     if (!username) {
         return res.status(422).send({ error: 'You must provide username'});
     }
@@ -104,7 +104,7 @@ exports.getAllReceivedMessages = function(req, res, next) {
 
 exports.getAllSentMessages = function(req, res, next) {
     const { username } = req.body;
-
+    console.log(username);
     if (!username) {
         return res.status(422).send({ error: 'You must provide username'});
     }
