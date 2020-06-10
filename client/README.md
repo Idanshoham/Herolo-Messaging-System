@@ -1,5 +1,3 @@
-Herolo Recruitment Home Assignment - Messaging System: created using React/Redux & Hooks + Server with MongoDB.
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
