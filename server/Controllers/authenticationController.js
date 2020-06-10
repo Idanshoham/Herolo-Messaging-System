@@ -8,12 +8,12 @@ function tokenForUser(user) {
 }
 
 exports.signin = function(req, res, next) {
+    console.log(req.user);
     res.send({ token: tokenForUser(req.user) });
 }
 
 exports.signup = function(req, res, next) {
-    const username = req.body.username;
-    const password = req.body.password;
+    const { name, username, password } = req.body;
 
     if (!username || !password) {
         return res.status(422).send({ error: 'You must provide username and password'});
@@ -29,6 +29,7 @@ exports.signup = function(req, res, next) {
         }
 
         const user = new User({
+            name: name,
             username: username,
             password: password
         });
