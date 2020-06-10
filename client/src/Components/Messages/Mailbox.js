@@ -12,6 +12,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import MenuIcon from '@material-ui/icons/Menu';
@@ -21,6 +24,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import requireAuth from '../HOCS/requireAuth';
 import OperationBox from './OperationBox';
 import MessagesList from './MessagesList';
+import EditUserDetails from '../EditUserDetails';
 import { signout } from '../../Actions/authActions';
 import { getUserDetailsByToken, clearUser } from '../../Actions/userActions';
 import { getAllReceivedMessages, getAllSentMessages, deleteMessage, clearMessages } from '../../Actions/messageActions';
@@ -64,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    alignItems: 'center',
   },
   drawerPaper: {
     position: 'relative',
@@ -101,14 +106,51 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalPaper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  main: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const Mailbox = props => {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
     const [inbox, setInbox] = useState(true);
+    const [openModal, setOpenModal] = useState(false);
     const { authenticated, user, messagesReceived, messagesSent, 
       getUserDetailsByToken, clearUser, getAllReceivedMessages, getAllSentMessages, deleteMessage, clearMessages, signout } = props;
+
+    const handleModalOpen = () => {
+      setOpenModal(true);
+    };
+  
+    const handleModalClose = () => {
+      setOpenModal(false);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -125,7 +167,7 @@ const Mailbox = props => {
     useEffect(() => {
       if (authenticated && isEmpty(user)) {
         getUserDetailsByToken(authenticated);
-      } else {
+      } else if (authenticated) {
         if (inbox) {
           if (messagesReceived === undefined) {
             handleGetAllReceviedMessages(user.username);
@@ -190,7 +232,25 @@ const Mailbox = props => {
                   <MenuIcon />
               </IconButton>
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                {`Welcome  ${user.username}`}
+                Welcome
+                <IconButton color="inherit" size="small" onClick={handleModalOpen}>{user.username}</IconButton>
+                <Modal
+                className={classes.modal}
+                open={openModal}
+                onClose={handleModalClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500,
+                }}
+              >
+                <Fade in={openModal}>
+                  <div className={classes.modalPaper}>
+                    <EditUserDetails classes={classes} handleClose={handleModalClose}/>
+                    {/* <NewMessage receiver={message.sender} classes={classes} inbox={isInbox} handleClose={handleClose}/> */}
+                  </div>
+                </Fade>
+              </Modal>
               </Typography>
               <IconButton color="inherit" onClick={() => { clearStore() }}>
                   <ExitToAppIcon />
@@ -216,10 +276,10 @@ const Mailbox = props => {
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Container maxWidth={false} className={classes.container}>
-              <Grid container>
+              <Grid container style={{ display: 'grid' }}>
                 <Grid item>
                   <Paper className={classes.paper}>
-                    <MessagesList messages={inbox ? messagesReceived : messagesSent } handleDelete={handleDelete}/>
+                    <MessagesList messages={inbox ? messagesReceived : messagesSent } isInbox={inbox} handleAddition={handleAddition} handleDelete={handleDelete}/>
                   </Paper>
                 </Grid>
               </Grid>

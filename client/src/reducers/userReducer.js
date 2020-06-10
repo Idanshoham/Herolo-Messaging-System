@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
     switch (action.type) {
         case USER_DATA:
-            return { ...state, user: action.payload };
+            return { ...state, user: action.payload, errorMessage: '' };
         case USER_ERROR:
             return { ...state, errorMessage: action.payload };
         case USER_CLEAR:

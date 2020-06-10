@@ -61,6 +61,7 @@ class NewMessage extends Component {
                         fullWidth
                         id="receiver"
                         label="To"
+                        value={this.state.receiver}
                         onInput={ e=> this.setState({ receiver: e.target.value })}
                         autoFocus
                         />
@@ -110,7 +111,7 @@ class NewMessage extends Component {
 }
 
 function mapStateToProps(state) {
-    return { username: state.user.user.username };
+    return { username: state.user.user.username, errorMessage: state.messages.errorMessage };
 }
 
 export default connect(mapStateToProps, { writeMessage })(NewMessage);

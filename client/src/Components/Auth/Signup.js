@@ -114,6 +114,7 @@ class Signup extends Component {
                         id="password"
                         label="Password"
                         name="password"
+                        type="password"
                         onInput={ e=> this.setState({ password: e.target.value })}
                         autoComplete="current-password"
                         />
@@ -124,8 +125,8 @@ class Signup extends Component {
                         fullWidth
                         name="confirmPassword"
                         label="Confirm Password"
-                        type="confirmPassword"
                         id="confirmPassword"
+                        type="password"
                         onInput={ e=> this.setState({ confirmPassword: e.target.value })}
                         autoComplete="current-password"
                         />

@@ -9,11 +9,11 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
     switch (action.type) {
         case MESSAGE_SEND:
-            return { ...state };
+            return { ...state, errorMessage: '' };
         case MESSAGE_SENT:
-                return { ...state, messagesSent: action.payload };
+                return { ...state, messagesSent: action.payload, errorMessage: '' };
         case MESSAGE_RECEVIED:
-            return { ...state, messagesReceived: action.payload };
+            return { ...state, messagesReceived: action.payload, errorMessage: '' };
         case MESSAGE_CLEAR:
             return INITIAL_STATE;
         case MESSAGE_ERROR:

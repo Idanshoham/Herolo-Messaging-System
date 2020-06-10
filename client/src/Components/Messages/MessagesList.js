@@ -5,10 +5,15 @@ import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 import DeleteIcon from '@material-ui/icons/Delete';
+import SendIcon from '@material-ui/icons/Send';
 
+import NewMessage from './NewMessage';
 import * as dateService from '../../Services/dateService';
 
 const ExpansionPanel = withStyles({
@@ -55,15 +60,41 @@ const ExpansionPanelDetails = withStyles((theme) => ({
   },
 }))(MuiExpansionPanelDetails);
 
-const CenteredTypography = withStyles((theme) => ({
+const CenteredContentTypography = withStyles((theme) => ({
   root: {
-    alignSelf: "center"
-  }
+    alignSelf: 'center',
+  },
 }))(Typography);
 
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+
 const MessagesList = props => {
-  const { messages, handleDelete } = props;
+  const classes = useStyles();
+  const { messages, isInbox, handleAddition, handleDelete } = props;
   const [expanded, setExpanded] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (added = false) => {
+    setOpen(false);
+    if (added)
+      handleAddition();
+  };
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -76,14 +107,37 @@ const MessagesList = props => {
           <ExpansionPanel square display="grid" expanded={expanded === `panel${index}`} onChange={handleChange('panel'+index)} key={index}>
             <ExpansionPanelSummary aria-controls={`panel${index}d-content`} id={`panel${index}d-header`}>
               <Fragment>
-                <CenteredTypography>{`From: ${message.sender}             Subject: ${message.subject}            ${dateService.dateFormating(message.creationDate)}`}</CenteredTypography>
+                <Typography style={{ marginRight: 'auto'}}>{`From: ${message.sender}`} <br /> {`To: ${message.receiver}`}</Typography>
+                <CenteredContentTypography style={{ marginRight: 'auto'}}>{message.subject}</CenteredContentTypography>
+                <CenteredContentTypography >{dateService.dateFormating(message.creationDate)}</CenteredContentTypography>
                 <IconButton onClick={() => { handleDelete(message._id, messages) }}>
                   <DeleteIcon />
                 </IconButton>
               </Fragment>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>{`Message: ${message.message}`}</Typography>
+              <Typography style={{ marginRight: 'auto'}}>{message.message}</Typography>
+              {isInbox && <IconButton size="small" onClick={handleOpen}>
+                Reply
+                <SendIcon />
+              </IconButton> 
+              }
+              <Modal
+                className={classes.modal}
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500,
+                }}
+              >
+                <Fade in={open}>
+                  <div className={classes.paper}>
+                    <NewMessage receiver={message.sender} classes={classes} inbox={isInbox} handleClose={handleClose}/>
+                  </div>
+                </Fade>
+              </Modal>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         );
