@@ -1,6 +1,6 @@
 {
   "name": "herolo-messaging-system",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -36,6 +36,7 @@
     "redux-form": "^8.2.6",
     "redux-thunk": "^2.3.0"
   },
+  "proxy": "http://localhost:3000/",
   "browserslist": {
     "production": [
       ">0.2%",
