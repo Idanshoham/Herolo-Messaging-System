@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { USER_DATA, USER_ERROR } from './types';
+import { USER_DATA, USER_ERROR, USER_CLEAR } from './types';
 
 export const getUserDetailsByToken = userToken => async dispatch => {
     try {
@@ -60,3 +60,10 @@ export const editUserDetails = userDetails => async dispatch => {
         });
     };
 }
+
+export const clearUser = () => {
+    return {
+        type: USER_CLEAR,
+        payload: undefined
+    };
+};

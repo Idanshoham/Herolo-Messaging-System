@@ -15,6 +15,8 @@ import SendIcon from '@material-ui/icons/Send';
 import InboxIcon from '@material-ui/icons/Inbox';
 import AddIcon from '@material-ui/icons/Add';
 
+import NewMessage from './NewMessage';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -35,11 +37,28 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  main: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const OperationBox = props => {
   const classes = useStyles();
-  const { isDrawerOpen, isInbox, handleMessagesShown } = props;
+  const { isDrawerOpen, isInbox, handleAddition, handleMessagesShown } = props;
   const [selectedIndex, setSelectedIndex] = useState(isInbox ? 'inbox' : 'sent');
   const [open, setOpen] = useState(false);
 
@@ -47,8 +66,10 @@ const OperationBox = props => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (added = false) => {
     setOpen(false);
+    if (added)
+      handleAddition();
   };
 
   const handleListItemClick = (event, index) => {
@@ -65,8 +86,6 @@ const OperationBox = props => {
             New Message
           </Button>
           <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
             className={classes.modal}
             open={open}
             onClose={handleClose}
@@ -78,8 +97,7 @@ const OperationBox = props => {
           >
             <Fade in={open}>
               <div className={classes.paper}>
-                <h2 id="transition-modal-title">Transition modal</h2>
-                <p id="transition-modal-description">react-transition-group animates me.</p>
+                <NewMessage classes={classes} inbox={isInbox} handleClose={handleClose}/>
               </div>
             </Fade>
           </Modal>

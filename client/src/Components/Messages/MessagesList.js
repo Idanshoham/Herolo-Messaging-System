@@ -1,16 +1,15 @@
-import React, { Fragment, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { Fragment, useState } from 'react';
 import { isEmpty } from 'lodash';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { getAllReceivedMessages, getAllSentMessages, deleteMessage } from '../../Actions/messageActions';
+import * as dateService from '../../Services/dateService';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -56,50 +55,35 @@ const ExpansionPanelDetails = withStyles((theme) => ({
   },
 }))(MuiExpansionPanelDetails);
 
+const CenteredTypography = withStyles((theme) => ({
+  root: {
+    alignSelf: "center"
+  }
+}))(Typography);
+
 const MessagesList = props => {
-  const { inbox, username, messagesReceived, messagesSent, getAllReceivedMessages, getAllSentMessages, deleteMessage } = props;
-  const [expanded, setExpanded] = React.useState('');
+  const { messages, handleDelete } = props;
+  const [expanded, setExpanded] = useState('');
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    if (inbox) {
-      if ((messagesReceived === undefined || !isEmpty(messagesReceived))) {
-        getAllReceivedMessages({ username });
-      } 
-    } else {
-      if ((messagesSent === undefined|| !isEmpty(messagesSent))) {
-        getAllSentMessages({ username });
-      } 
-    }
-  })
-
-  const messages = inbox ? messagesReceived : messagesSent;
   if (!isEmpty(messages)) {
     return (
       messages.map((message, index) => {
         return (
-          <ExpansionPanel square expanded={expanded === `panel${index}`} onChange={handleChange('panel'+index)} key={index}>
+          <ExpansionPanel square display="grid" expanded={expanded === `panel${index}`} onChange={handleChange('panel'+index)} key={index}>
             <ExpansionPanelSummary aria-controls={`panel${index}d-content`} id={`panel${index}d-header`}>
-              <Typography>{`Sender:${message.sender} Subject:${message.subject}`}</Typography>
-              <Button startIcon={<DeleteIcon />} onClick={() => {
-                deleteMessage(message._id, !inbox).then(() => {
-                  if (inbox) {
-                    if (!isEmpty(messagesReceived) && messages.length === messagesReceived.length) {
-                      getAllReceivedMessages({ username });
-                    } 
-                  } else {
-                    if (!isEmpty(messagesSent) && messages.length === messagesSent.length) {
-                      getAllSentMessages({ username });
-                    } 
-                  }
-                });
-              }}/>
+              <Fragment>
+                <CenteredTypography>{`From: ${message.sender}             Subject: ${message.subject}            ${dateService.dateFormating(message.creationDate)}`}</CenteredTypography>
+                <IconButton onClick={() => { handleDelete(message._id, messages) }}>
+                  <DeleteIcon />
+                </IconButton>
+              </Fragment>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>{`Message:${message.message}`}</Typography>
+              <Typography>{`Message: ${message.message}`}</Typography>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         );
@@ -110,8 +94,4 @@ const MessagesList = props => {
   }
 }
 
-function mapStateToProps(state) {
-  return { username: state.user.user.username, messagesReceived: state.messages.messagesReceived, messagesSent: state.messages.messagesSent };
-}
-
-export default connect(mapStateToProps, { getAllReceivedMessages, getAllSentMessages, deleteMessage })(MessagesList);
+export default MessagesList;

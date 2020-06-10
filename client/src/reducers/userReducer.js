@@ -1,4 +1,4 @@
-import { USER_DATA, USER_ERROR } from '../Actions/types';
+import { USER_DATA, USER_ERROR, USER_CLEAR } from '../Actions/types';
 
 const INITIAL_STATE = {
     user: {},
@@ -11,6 +11,8 @@ export default function(state = INITIAL_STATE, action) {
             return { ...state, user: action.payload };
         case USER_ERROR:
             return { ...state, errorMessage: action.payload };
+        case USER_CLEAR:
+            return INITIAL_STATE;
         default:
             return state;
     }

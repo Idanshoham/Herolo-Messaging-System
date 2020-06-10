@@ -93,7 +93,7 @@ exports.getAllReceivedMessages = function(req, res, next) {
         return res.status(422).send({ error: 'You must provide username'});
     }
 
-    Message.find({ receiver: username, isDeletedByReceiver: false }, function(err, allReceivedMessages) {
+    Message.find({ receiver: username, isDeletedByReceiver: false }).sort({ 'creationDate': -1}).exec(function(err, allReceivedMessages) {
         if (err) {
             return next(err);
         } else {
@@ -109,7 +109,7 @@ exports.getAllSentMessages = function(req, res, next) {
         return res.status(422).send({ error: 'You must provide username'});
     }
 
-    Message.find({ sender: username, isDeletedBySender: false }, function(err, allSentMessages) {
+    Message.find({ sender: username, isDeletedBySender: false }).sort({ 'creationDate': -1}).exec(function(err, allSentMessages) {
         if (err) {
             return next(err);
         } else {

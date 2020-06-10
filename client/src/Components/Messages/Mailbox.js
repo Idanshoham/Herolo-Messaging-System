@@ -22,7 +22,8 @@ import requireAuth from '../HOCS/requireAuth';
 import OperationBox from './OperationBox';
 import MessagesList from './MessagesList';
 import { signout } from '../../Actions/authActions';
-import { getUserDetailsByToken } from '../../Actions/userActions';
+import { getUserDetailsByToken, clearUser } from '../../Actions/userActions';
+import { getAllReceivedMessages, getAllSentMessages, deleteMessage, clearMessages } from '../../Actions/messageActions';
 
 const drawerWidth = 240;
 
@@ -106,7 +107,8 @@ const Mailbox = props => {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
     const [inbox, setInbox] = useState(true);
-    const { authenticated, user, getUserDetailsByToken, signout } = props;
+    const { authenticated, user, messagesReceived, messagesSent, 
+      getUserDetailsByToken, clearUser, getAllReceivedMessages, getAllSentMessages, deleteMessage, clearMessages, signout } = props;
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -121,16 +123,62 @@ const Mailbox = props => {
     };
 
     useEffect(() => {
-      if (isEmpty(user)) {
+      if (authenticated && isEmpty(user)) {
         getUserDetailsByToken(authenticated);
+      } else {
+        if (inbox) {
+          if (messagesReceived === undefined) {
+            handleGetAllReceviedMessages(user.username);
+          } 
+        } else {
+          if (messagesSent === undefined) {
+            handleGetAllSentMessages(user.username);
+          } 
+        }
       }
     });
+
+    const handleGetAllReceviedMessages = username => {
+      getAllReceivedMessages({ username });
+    }
+  
+    const handleGetAllSentMessages = username => {
+      getAllSentMessages({ username });
+    }
+
+    const handleAddition = () => {
+      handleGetAllSentMessages(user.username);
+    }
+
+    const handleDelete = (messageId, messages) => {
+      const newMessages = messages.map(message => {
+        if (messages._id !== messageId)
+          return message;
+      });
+      deleteMessage(messageId, !inbox).then(() => {
+        if (inbox) {
+          if (newMessages.length < messagesReceived.length) {
+            handleGetAllReceviedMessages(user.sername);
+          } 
+        } else {
+          if (newMessages.length < messagesSent.length) {
+            handleGetAllSentMessages(user.username);
+          } 
+        }
+      });
+    }
+
+    const clearStore = () => {
+      clearMessages();
+      clearUser();
+      signout();
+    }
 
     if (!isEmpty(user)) {
       return (
           <div className={classes.root}>
-          <CssBaseline />
-          <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+            <CssBaseline />
+            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
               <Toolbar className={classes.toolbar}>
               <IconButton
                   edge="start"
@@ -144,7 +192,7 @@ const Mailbox = props => {
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 {`Welcome  ${user.username}`}
               </Typography>
-              <IconButton color="inherit" onClick={() => { signout() }}>
+              <IconButton color="inherit" onClick={() => { clearStore() }}>
                   <ExitToAppIcon />
                   Sign Out
               </IconButton>
@@ -163,21 +211,21 @@ const Mailbox = props => {
                   </IconButton>
               </div>
               <Divider />
-              <OperationBox isDrawerOpen={open} isInbox={inbox} handleMessagesShown={handleMessagesShown}/>
+              <OperationBox isDrawerOpen={open} isInbox={inbox} handleAddition={handleAddition} handleMessagesShown={handleMessagesShown}/>
           </Drawer>
           <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-              <Container maxWidth={false} className={classes.container}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth={false} className={classes.container}>
               <Grid container>
-                  <Grid item>
+                <Grid item>
                   <Paper className={classes.paper}>
-                    <MessagesList inbox={inbox} />
+                    <MessagesList messages={inbox ? messagesReceived : messagesSent } handleDelete={handleDelete}/>
                   </Paper>
-                  </Grid>
+                </Grid>
               </Grid>
-              </Container>
+            </Container>
           </main>
-          </div>
+        </div>
       );
     }
     else {
@@ -186,9 +234,9 @@ const Mailbox = props => {
 }
 
 function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated, user: state.user.user };
+    return { authenticated: state.auth.authenticated, user: state.user.user, messagesReceived: state.messages.messagesReceived, messagesSent: state.messages.messagesSent };
 }
 
 export default withStyles(useStyles)(connect(
-    mapStateToProps, { getUserDetailsByToken, signout }
+    mapStateToProps, { getUserDetailsByToken, clearUser, getAllReceivedMessages, getAllSentMessages, deleteMessage, clearMessages, signout }
 )(requireAuth(Mailbox)));

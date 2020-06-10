@@ -15,7 +15,7 @@ export default function(state = INITIAL_STATE, action) {
         case MESSAGE_RECEVIED:
             return { ...state, messagesReceived: action.payload };
         case MESSAGE_CLEAR:
-            return { ...state, messagesReceived: action.payload, messagesSent: action.payload };
+            return INITIAL_STATE;
         case MESSAGE_ERROR:
             return { ...state, errorMessage: action.payload };
         default:
