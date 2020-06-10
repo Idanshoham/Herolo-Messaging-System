@@ -7,7 +7,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [https://herolomessegingsystem.herokuapp.com](https://herolomessegingsystem.herokuapp.com) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
@@ -40,7 +40,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 ### `npm run dev`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [https://herolomessegingsystem.herokuapp.com](https://herolomessegingsystem.herokuapp.com) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
