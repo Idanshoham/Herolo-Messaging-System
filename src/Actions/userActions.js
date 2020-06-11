@@ -2,10 +2,12 @@ import axios from 'axios';
 import { USER_DATA, USER_ERROR, USER_CLEAR } from './types';
 import { PORT } from '../Constants/portConstant';
 
+const HOST = process.env.HOST;
+
 export const getUserDetailsByToken = userToken => async dispatch => {
     try {
         const response = await axios.post(
-            `http://localhost:${PORT}/getUserDetailsById`, 
+            `http://${HOST}:${PORT}/getUserDetailsById`, 
             { userToken }
         );
 
@@ -25,7 +27,7 @@ export const getUserDetailsByToken = userToken => async dispatch => {
 export const getUserDetails = username => async dispatch => {
     try {
         const response = await axios.post(
-            'http://localhost:3090/getUserDetails', 
+            'http://${HOST}:3090/getUserDetails', 
             { username }
         );
 
@@ -45,7 +47,7 @@ export const getUserDetails = username => async dispatch => {
 export const editUserDetails = userDetails => async dispatch => {
     try {
         const response = await axios.post(
-            'http://localhost:3090/editUserDetails', 
+            'http://${HOST}:3090/editUserDetails', 
             userDetails
         );
 
