@@ -5,7 +5,7 @@ import { PORT } from '../Constants/portConstant';
 export const signup = formProps => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/signup`, 
+            `http://localhost:${PORT}/signup`, 
             formProps
         );
 
@@ -26,7 +26,7 @@ export const signup = formProps => async dispatch => {
 export const signin = formProps => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/signin`, 
+            `http://localhost:${PORT}/signin`, 
             formProps
         );
 

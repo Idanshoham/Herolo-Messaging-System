@@ -5,7 +5,7 @@ import { PORT } from '../Constants/portConstant';
 export const getUserDetailsByToken = userToken => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/getUserDetailsById`, 
+            `http://localhost:${PORT}/getUserDetailsById`, 
             { userToken }
         );
 
@@ -25,7 +25,7 @@ export const getUserDetailsByToken = userToken => async dispatch => {
 export const getUserDetails = username => async dispatch => {
     try {
         const response = await axios.post(
-            'http://127.0.0.1:3090/getUserDetails', 
+            'http://localhost:3090/getUserDetails', 
             { username }
         );
 
@@ -45,7 +45,7 @@ export const getUserDetails = username => async dispatch => {
 export const editUserDetails = userDetails => async dispatch => {
     try {
         const response = await axios.post(
-            'http://127.0.0.1:3090/editUserDetails', 
+            'http://localhost:3090/editUserDetails', 
             userDetails
         );
 

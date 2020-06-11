@@ -5,7 +5,7 @@ import { PORT } from '../Constants/portConstant';
 export const writeMessage = messageDetails => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/writeMessage`, 
+            `http://localhost:${PORT}/writeMessage`, 
             messageDetails
         );
 
@@ -25,7 +25,7 @@ export const writeMessage = messageDetails => async dispatch => {
 export const deleteMessage = (messageId, isDeleterSender) => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/deleteMessage`, 
+            `http://localhost:${PORT}/deleteMessage`, 
             { messageId, isDeleterSender }
         );
 
@@ -45,7 +45,7 @@ export const deleteMessage = (messageId, isDeleterSender) => async dispatch => {
 export const getAllReceivedMessages = username => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/getAllReceivedMessages`, 
+            `http://localhost:${PORT}/getAllReceivedMessages`, 
             username 
         );
         
@@ -65,7 +65,7 @@ export const getAllReceivedMessages = username => async dispatch => {
 export const getAllSentMessages = username => async dispatch => {
     try {
         const response = await axios.post(
-            `http://127.0.0.1:${PORT}/getAllSentMessages`, 
+            `http://localhost:${PORT}/getAllSentMessages`, 
             username 
         );
         

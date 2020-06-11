@@ -34,7 +34,7 @@
     "redux-form": "^8.3.6",
     "redux-thunk": "^2.3.0"
   },
-  "proxy": "http://127.0.0.1:5000/",
+  "proxy": "http://localhost:5000/",
   "browserslist": {
     "production": [
       ">0.2%",
