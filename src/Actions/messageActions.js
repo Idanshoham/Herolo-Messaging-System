@@ -2,12 +2,10 @@ import axios from 'axios';
 import { MESSAGE_SEND, MESSAGE_SENT, MESSAGE_RECEVIED, MESSAGE_CLEAR, MESSAGE_ERROR } from './types';
 import { PORT } from '../Constants/portConstant';
 
-const HOST = process.env.HOST;
-
 export const writeMessage = messageDetails => async dispatch => {
     try {
         const response = await axios.post(
-            `http://${HOST}:${PORT}/writeMessage`, 
+            `http://localhost:${PORT}/writeMessage`, 
             messageDetails
         );
 
@@ -27,7 +25,7 @@ export const writeMessage = messageDetails => async dispatch => {
 export const deleteMessage = (messageId, isDeleterSender) => async dispatch => {
     try {
         const response = await axios.post(
-            `http://${HOST}:${PORT}/deleteMessage`, 
+            `http://localhost:${PORT}/deleteMessage`, 
             { messageId, isDeleterSender }
         );
 
@@ -47,7 +45,7 @@ export const deleteMessage = (messageId, isDeleterSender) => async dispatch => {
 export const getAllReceivedMessages = username => async dispatch => {
     try {
         const response = await axios.post(
-            `http://${HOST}:${PORT}/getAllReceivedMessages`, 
+            `http://localhost:${PORT}/getAllReceivedMessages`, 
             username 
         );
         
@@ -67,7 +65,7 @@ export const getAllReceivedMessages = username => async dispatch => {
 export const getAllSentMessages = username => async dispatch => {
     try {
         const response = await axios.post(
-            `http://${HOST}:${PORT}/getAllSentMessages`, 
+            `http://localhost:${PORT}/getAllSentMessages`, 
             username 
         );
         
