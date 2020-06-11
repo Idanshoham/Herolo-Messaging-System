@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from './types';
+import { PORT } from '../Constants/portConstant';
 
 export const signup = formProps => async dispatch => {
     try {
