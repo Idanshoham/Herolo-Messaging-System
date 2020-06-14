@@ -19,11 +19,11 @@ findAndGetUserByUsername = (username, res, next) => {
 
 exports.getUserDetailsById = function(req, res, next) {
     const userToken = req.body.userToken;
-    const userId = ObjectID(jwt.decode(userToken, process.env.SECRET).sub);
-
-    if (!userId) {
-        return res.status(422).send({ error: 'You must provide userId'});
+    if (!userToken) {
+        return res.status(422).send({ error: 'You must provide userToken'});
     }
+    
+    const userId = ObjectID(jwt.decode(userToken, process.env.SECRET).sub);
 
     User.findById(userId , function(err, existingUser) {
         if (err) {
