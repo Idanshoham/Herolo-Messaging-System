@@ -1,5 +1,5 @@
 const jwt = require('jwt-simple');
-const User = require('../models/user');
+const User = require('../Models/user');
 
 function tokenForUser(user) {
     const timestamp = new Date().getTime();
