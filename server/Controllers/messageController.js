@@ -1,5 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
-const Message = require('../models/message');
+const Message = require('../Models/message');
 
 exports.writeMessage = function(req, res, next) {
     const { sender, receiver, subject, message } = req.body;

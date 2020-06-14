@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jwt-simple');
 const ObjectID = require('mongodb').ObjectID;
-const User = require('../models/user');
+const User = require('../Models/user');
 
 findAndGetUserByUsername = (username, res, next) => {
     User.findOne({ username }, function(err, existingUser) {
