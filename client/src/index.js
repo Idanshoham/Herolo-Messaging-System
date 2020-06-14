@@ -24,8 +24,8 @@ ReactDOM.render(
         <BrowserRouter>
             <App>
                 <Route path="/" exact component={Mailbox} />
-                <Route path="/signin" component={Signin} />
-                <Route path="/signup" component={Signup} />
+                <Route path="/Signin" component={Signin} />
+                <Route path="/Signup" component={Signup} />
             </App>
         </BrowserRouter>
     </Provider>,

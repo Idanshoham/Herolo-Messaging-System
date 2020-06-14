@@ -119,7 +119,7 @@ class Signin extends Component {
                         </Button>
                         <Grid container justify="center">
                             <Grid item>
-                            <Link href="" variant="body2" onClick={() => {this.props.history.push("/signup")}}>
+                            <Link href="" variant="body2" onClick={() => {this.props.history.push("/Signup")}}>
                                 {"Don't have an account? Sign Up"}
                             </Link>
                             </Grid>
