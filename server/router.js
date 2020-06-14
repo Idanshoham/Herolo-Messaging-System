@@ -1,6 +1,6 @@
-const AuthenticationController = require('./controllers/authenticationController');
-const UserController = require('./controllers/userController');
-const MessageController = require('./controllers/messageController');
+const AuthenticationController = require('./Controllers/authenticationController');
+const UserController = require('./Controllers/userController');
+const MessageController = require('./Controllers/messageController');
 const passportService = require('./services/passport');
 const passport = require('passport');
 
