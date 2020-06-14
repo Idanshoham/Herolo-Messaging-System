@@ -25,7 +25,6 @@ export const signup = formProps => async dispatch => {
 
 export const signin = formProps => async dispatch => {
     try {
-        console.log(process.env.baseURL);
         const response = await axios.post(
             `${BASE_URL}/signin`, 
             formProps
