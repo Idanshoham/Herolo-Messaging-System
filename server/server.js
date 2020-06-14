@@ -26,8 +26,8 @@ const startWebServer = () => {
 
     app.use(express.static("public"));
     app.use(morgan('combined'));
-    app.use(bodyParser.json({ type: '*/*' }));
     app.use(cors());
+    app.use(bodyParser.json({ type: '*/*' }));
     router(app);
 
     app.get('*', function(req, res) {

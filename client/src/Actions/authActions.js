@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { AUTH_USER, AUTH_ERROR } from './types';
-import { PORT } from '../Constants/portConstant';
+import { BASE_URL } from '../Constants/baseUrlConstant';
 
 export const signup = formProps => async dispatch => {
     try {
         const response = await axios.post(
-            `http://localhost:${PORT}/signup`, 
+            `${BASE_URL}/signup`, 
             formProps
         );
 
@@ -25,8 +25,9 @@ export const signup = formProps => async dispatch => {
 
 export const signin = formProps => async dispatch => {
     try {
+        console.log(process.env.baseURL);
         const response = await axios.post(
-            `http://localhost:${PORT}/signin`, 
+            `${BASE_URL}/signin`, 
             formProps
         );
 

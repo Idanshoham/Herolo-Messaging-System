@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { USER_DATA, USER_ERROR, USER_CLEAR } from './types';
-import { PORT } from '../Constants/portConstant';
+import { BASE_URL } from '../Constants/baseUrlConstant';
 
 export const getUserDetailsByToken = userToken => async dispatch => {
     try {
         const response = await axios.post(
-            `http://localhost:${PORT}/getUserDetailsById`, 
+            `${BASE_URL}/getUserDetailsById`, 
             { userToken }
         );
 
@@ -25,7 +25,7 @@ export const getUserDetailsByToken = userToken => async dispatch => {
 export const getUserDetails = username => async dispatch => {
     try {
         const response = await axios.post(
-            'http://localhost:3090/getUserDetails', 
+            `${BASE_URL}/getUserDetails`, 
             { username }
         );
 
@@ -45,7 +45,7 @@ export const getUserDetails = username => async dispatch => {
 export const editUserDetails = userDetails => async dispatch => {
     try {
         const response = await axios.post(
-            'http://localhost:3090/editUserDetails', 
+            `${BASE_URL}/editUserDetails`, 
             userDetails
         );
 
