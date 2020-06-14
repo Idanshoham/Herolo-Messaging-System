@@ -28,7 +28,7 @@ const startWebServer = () => {
     app.use(morgan('combined'));
     app.use(cors());
     app.use(bodyParser.json({ type: '*/*' }));
-    router(app);
+    //router(app);
 
     app.get('*', function(req, res) {
         res.sendFile(path.join(__dirname + '/public/index.html'));
